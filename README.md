@@ -7,6 +7,8 @@
 
 ## List of endpoints
 
+[Postman API Documentation](https://documenter.getpostman.com/view/3380651/U16krkUP)
+
 | Request Method | Endpoint | Description |
 | ------------- | -------- | ----------- |
 | GET | /todo | Get all todos |
