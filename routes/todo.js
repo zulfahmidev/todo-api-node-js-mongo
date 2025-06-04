@@ -81,12 +81,12 @@ router.delete('/:id', (req, res) => {
 });
 
 
-const formatResponse = (code = 200, success = true, message = "", item = [], meta = {}) => {
+const formatResponse = (code = 200, success = true, message = "", items = [], meta = {}) => {
   return {
     code: code,
     success: success,
     message: message,
-    item: item,
+    items: items,
     meta: meta
   };
 }
