@@ -8,7 +8,6 @@ router.get('/', async (req, res) => {
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
   const totalItems = await Todo.countDocuments().then(count => count)
-  let todoItems = [];
 
   await Todo.find()
     .skip(skip)
@@ -18,20 +17,18 @@ router.get('/', async (req, res) => {
       if (err) {
         return res.json({ error: err });
       }
-      console.log(todos);
-      todoItems = todos;
+      result = formatResponse(200, true, 'Todos fetched successfully', todoItems, {
+        totalItems:  todos.length,
+        totalPages: Math.ceil(todos.length / limit),
+        perPageItems: limit,
+        currentPage: page,
+        pageSize: todoItems.length,
+        hasMorePage: (todos.length > (page * limit))
+      })
+    
+      res.json(result);
     });
 
-  result = formatResponse(200, true, 'Todos fetched successfully', todoItems, {
-    totalItems:  totalItems,
-    totalPages: Math.ceil(totalItems / limit),
-    perPageItems: limit,
-    currentPage: page,
-    pageSize: todoItems.length,
-    hasMorePage: (totalItems > (page * limit))
-  })
-
-  return res.json(result);
 });
 
 // Create a todo
