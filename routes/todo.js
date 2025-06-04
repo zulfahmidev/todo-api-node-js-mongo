@@ -11,15 +11,15 @@ router.get('/', async (req, res) => {
   let todoItems = [];
 
   await Todo.find()
-  .skip(parseInt(skip))
-  .limit(parseInt(limit))
-  .exec((err, todos) => {
-    if (err) {
-      return res.status(500).json(formatResponse(500, false, 'Error fetching todos', [], {}));
-    }
-
-    todoItems = todos;
-  })
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 })
+    .exec((err, todos) => {
+      if (err) {
+        return res.json({ error: err });
+      }
+      todoItems = todos;
+    });
 
   result = formatResponse(200, true, 'Todos fetched successfully', todoItems, {
     totalItems:  totalItems,
