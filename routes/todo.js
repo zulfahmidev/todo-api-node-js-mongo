@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create a todo
-router.post('/create', (req, res) => {
+router.post('/', (req, res) => {
   const todo = Todo({
     title: req.body.title,
     description: req.body.description,
