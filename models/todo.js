@@ -7,11 +7,11 @@ const todoSchema = new Schema({
     type: String,
     required: true,
   },
-  content: {
+  description: {
     type: String,
     required: false,
   },
-  completed: {
+  is_completed: {
     type: Boolean,
     default: false,
   }

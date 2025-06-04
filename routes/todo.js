@@ -35,13 +35,14 @@ router.get('/', async (req, res) => {
 router.post('/create', (req, res) => {
   const todo = Todo({
     title: req.body.title,
-    content: req.body.content,
+    description: req.body.description,
+    is_completed: false,
   });
   todo.save((err, todo) => {
     if (err) {
-      return res.json({ error: err });
+      return res.json(formatResponse(500, false, err.message || 'An error occurred while creating the todo'));
     }
-    return res.json({ data: todo });
+    return res.json(formatResponse(201, true, 'Todo created successfully', todo));
   });
 });
 
@@ -50,16 +51,16 @@ router.put('/:id', (req, res) => {
   Todo.findById(req.params.id)
     .exec((err, todo) => {
       if (err) {
-        return res.json({ error: err });
+        return res.json(formatResponse(500, false, err.message || 'An error occurred while fetching the todo'));
       }
       todo.title = req.body.title ?? todo.title;
-      todo.content = req.body.content ?? todo.content;
-      todo.completed = req.body.completed ?? todo.completed;
+      todo.description = req.body.description ?? todo.description;
+      todo.is_completed = req.body.is_completed ?? todo.is_completed;
       todo.save((err, todo) => {
         if (err) {
-          return res.json({ error: err });
+          return res.json(formatResponse(500, false, err.message || 'An error occurred while updating the todo'));
         }
-        return res.json({ data: todo });
+        return res.json(formatResponse(200, true, 'Todo updated successfully', todo));
       })
     });
 });
@@ -70,12 +71,12 @@ router.delete('/:id', (req, res) => {
     _id: req.params.id
   }).exec((err, result) => {
     if (err) {
-      return res.json({ error: err });
+      return res.json(formatResponse(500, false, err.message || 'An error occurred while deleting the todo'));
     }
     if (result.deletedCount == 0) {
-      return res.json({ data: 'No Todo Found with given id' });
+      return res.json(formatResponse(404, false, 'Todo not found'));
     }
-    return res.json({ data: 'Deleted Successfully' });
+    return res.json(formatResponse(200, true, 'Todo deleted successfully'))
   })
 });
 
