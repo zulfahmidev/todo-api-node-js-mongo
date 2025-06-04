@@ -15,20 +15,23 @@ router.get('/', async (req, res) => {
   .limit(parseInt(limit))
   .exec((err, todos) => {
     if (err) {
-      return res.json(formatResponse(500, false, 'Error fetching todos', [], {}));
+      return res.status(500).json(formatResponse(500, false, 'Error fetching todos', [], {}));
     }
 
     todoItems = todos;
   })
 
-  return res.json(formatResponse(200, true, 'Todos fetched successfully', todoItems, {
+  result = formatResponse(200, true, 'Todos fetched successfully', todoItems, {
     totalItems:  totalItems,
     totalPages: Math.ceil(totalItems / limit),
     perPageItems: limit,
     currentPage: page,
     pageSize: todoItems.length,
     hasMorePage: (totalItems > (page * limit))
-  }));
+  })
+
+  console.log(result);
+  return res.json(result);
 });
 
 // Create a todo
