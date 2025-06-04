@@ -3,19 +3,32 @@ const router = express.Router();
 const Todo = require('../models/todo');
 
 // List all todo
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
-  Todo.find()
-    .skip(parseInt(skip))
-    .limit(parseInt(limit))
-    .exec((err, todos) => {
-      if (err) {
-        return res.json({ error: err });
-      }
-      return res.json({ data: todos });
-    });
+  const totalItems = Todo.countDocuments();
+  let todoItems = [];
+
+  await Todo.find()
+  .skip(parseInt(skip))
+  .limit(parseInt(limit))
+  .exec((err, todos) => {
+    if (err) {
+      return res.json(formatResponse(500, false, 'Error fetching todos', [], {}));
+    }
+
+    todoItems = todos;
+  })
+
+  return res.json(formatResponse(200, true, 'Todos fetched successfully', todos, {
+    totalItems:  totalItems,
+    totalPages: Math.ceil(totalItems / limit),
+    perPageItems: limit,
+    currentPage: page,
+    pageSize: todos.length,
+    hasMorePage: (totalItems > (page * limit))
+  }));
 });
 
 // Create a todo
@@ -65,5 +78,16 @@ router.delete('/:id', (req, res) => {
     return res.json({ data: 'Deleted Successfully' });
   })
 });
+
+
+const formatResponse = (code = 200, status = true, message = "", item = [], meta = {}) => {
+  return {
+    code: code,
+    status: status,
+    message: message,
+    item: item,
+    meta: meta
+  };
+}
 
 module.exports = router;
