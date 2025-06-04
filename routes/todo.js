@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
       if (err) {
         return res.json({ error: err });
       }
+      console.log(todos);
       todoItems = todos;
     });
 
@@ -30,7 +31,6 @@ router.get('/', async (req, res) => {
     hasMorePage: (totalItems > (page * limit))
   })
 
-  console.log(result);
   return res.json(result);
 });
 
