@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
     if (err) {
       return res.json(formatResponse(500, false, err.message || 'An error occurred while creating the todo'));
     }
-    return res.json(formatResponse(201, true, 'Todo created successfully', todo));
+    return res.json(formatResponse(201, true, 'Todo created successfully', [todo]));
   });
 });
 
@@ -60,7 +60,7 @@ router.put('/:id', (req, res) => {
         if (err) {
           return res.json(formatResponse(500, false, err.message || 'An error occurred while updating the todo'));
         }
-        return res.json(formatResponse(200, true, 'Todo updated successfully', todo));
+        return res.json(formatResponse(200, true, 'Todo updated successfully', [todo]));
       })
     });
 });
