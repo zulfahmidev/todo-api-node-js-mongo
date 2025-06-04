@@ -21,12 +21,12 @@ router.get('/', async (req, res) => {
     todoItems = todos;
   })
 
-  return res.json(formatResponse(200, true, 'Todos fetched successfully', todos, {
+  return res.json(formatResponse(200, true, 'Todos fetched successfully', todoItems, {
     totalItems:  totalItems,
     totalPages: Math.ceil(totalItems / limit),
     perPageItems: limit,
     currentPage: page,
-    pageSize: todos.length,
+    pageSize: todoItems.length,
     hasMorePage: (totalItems > (page * limit))
   }));
 });
