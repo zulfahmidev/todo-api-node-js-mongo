@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const skip = (page - 1) * limit;
-  const totalItems = Todo.countDocuments();
+  const totalItems = await Todo.countDocuments().then(count => count)
   let todoItems = [];
 
   await Todo.find()
